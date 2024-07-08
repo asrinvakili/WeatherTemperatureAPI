@@ -13,5 +13,17 @@ class OpenMeteo(WeatherAPIBase):
         result_json = result.json()
         return result_json["current"]["temperature_2m"]
 
+class OpenWeather(WeatherAPIBase):
+    def __init__(self, lat, long, **kwargs):
+        self.lat = lat
+        self.long = long
+        self.api_token = kwargs['api_token']
+
+    def get_weather_temp(self):
+        params = {'lat': self.lat, 'lon': self.long, "appid": self.api_token}
+        result = requests.get("https://api.openweathermap.org/data/2.5/weather", params=params)
+        result_json = result.json()
+        k = float(result_json["main"]["temp"])
+        return k-273.15
 
 
